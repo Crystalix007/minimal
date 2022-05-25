@@ -1,7 +1,7 @@
 <style>
 
     html body {
-        font-family: '{{ .Site.Params.font }}', sans-serif;
+        font-family: Raleway, sans-serif;
         background-color: {{ .Site.Params.backgroundColor | default "white" }};
     }
 
@@ -19,13 +19,28 @@
 {{ range .Site.Params.css }} <link rel="stylesheet" href="{{ . | absURL }}"> {{ end }}
 
 <!-- google fonts -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family={{ .Site.Params.font }}">
+<style>
+/* raleway-regular - latin */
+@font-face {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    src: local(''),
+         url({{ "webfonts/raleway-v26-latin-regular.woff2" | absURL }}) format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+         url({{ "webfonts/raleway-v26-latin-regular.woff" | absURL }}) format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    font-display: swap;
+}
+</style>
 
 <!-- highlight.js -->
-{{ if .Site.Params.highlight | default false }} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/{{ .Site.Params.highlightStyle | default "default" }}.min.css"> {{ end }}
+{{ if .Site.Params.highlight | default false }}
+{{- $highlightStyleURL := printf "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/%s.min.css" (default "default" .Site.Params.highlightStyle) -}}
+{{- $highlightStyle := resources.GetRemote $highlightStyleURL | resources.Fingerprint -}}
+<link rel="stylesheet" href="{{ $highlightStyle.Permalink }}" integrity="{{ $highlightStyle.Data.Integrity }}">
+{{ end }}
 
 <!-- bootstrap -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ "css/bootstrap.min.css" | absURL }}">
 
 <!-- font awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+<link rel="stylesheet" href="{{ "css/fa-all.min.css" | absURL }}" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
